@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/vtm_prac.dir/main.cpp.o -o vtm_prac 
