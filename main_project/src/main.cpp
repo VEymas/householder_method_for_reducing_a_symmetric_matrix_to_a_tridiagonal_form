@@ -38,11 +38,10 @@ bool is_matrix_tridiagonal(std::vector<double> matrix, int size) {
 int main() {
     //TESTING
     std::srand(std::time(nullptr));
-    clock_t start = clock();
 
-    int n = 256;
+    int n = 512;
     std::vector<double> matrix = generate_sym_matrix(n);
-
+    clock_t start = clock();
     matrix = householder_method(matrix, n);
 
     clock_t end = clock();
