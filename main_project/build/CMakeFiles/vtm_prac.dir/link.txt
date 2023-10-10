@@ -1,1 +1,1 @@
-/Library/Developer/CommandLineTools/usr/bin/c++  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/vtm_prac.dir/src/main.cpp.o CMakeFiles/vtm_prac.dir/src/householder_for_sym_matrix.cpp.o -o vtm_prac 
+/usr/bin/c++ CMakeFiles/vtm_prac.dir/src/main.cpp.o CMakeFiles/vtm_prac.dir/src/householder_for_sym_matrix.cpp.o -o vtm_prac 

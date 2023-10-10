@@ -1,3 +1,3 @@
-/Users/mihailprotopopov/PROJECTS/vtm_prac/main_project/build/CMakeFiles/vtm_prac.dir
-/Users/mihailprotopopov/PROJECTS/vtm_prac/main_project/build/CMakeFiles/edit_cache.dir
-/Users/mihailprotopopov/PROJECTS/vtm_prac/main_project/build/CMakeFiles/rebuild_cache.dir
+/home/m.protopopov/vtm_prac/main_project/build/CMakeFiles/vtm_prac.dir
+/home/m.protopopov/vtm_prac/main_project/build/CMakeFiles/edit_cache.dir
+/home/m.protopopov/vtm_prac/main_project/build/CMakeFiles/rebuild_cache.dir
