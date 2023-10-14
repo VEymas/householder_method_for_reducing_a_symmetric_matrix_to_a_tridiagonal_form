@@ -1,5 +1,5 @@
-CMakeFiles/vtm_prac.dir/main.cpp.o: /home/m.protopopov/vtm_prac/main.cpp \
- /usr/include/stdc-predef.h \
+CMakeFiles/vtm_prac.dir/main.cpp.o: \
+ /home/m.protopopov/vtm_prac/3.10.23/main.cpp /usr/include/stdc-predef.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/12/include/g++-v12/iostream \
  /usr/lib/gcc/x86_64-pc-linux-gnu/12/include/g++-v12/x86_64-pc-linux-gnu/bits/c++config.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/12/include/g++-v12/x86_64-pc-linux-gnu/bits/os_defines.h \
@@ -164,4 +164,9 @@ CMakeFiles/vtm_prac.dir/main.cpp.o: /home/m.protopopov/vtm_prac/main.cpp \
  /usr/lib/gcc/x86_64-pc-linux-gnu/12/include/g++-v12/bits/ranges_util.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/12/include/g++-v12/pstl/glue_algorithm_defs.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/12/include/g++-v12/pstl/execution_defs.h \
- /usr/lib/gcc/x86_64-pc-linux-gnu/12/include/g++-v12/ctime
+ /usr/lib/gcc/x86_64-pc-linux-gnu/12/include/g++-v12/ctime \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/12/include/g++-v12/vector \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/12/include/g++-v12/bits/stl_uninitialized.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/12/include/g++-v12/bits/stl_vector.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/12/include/g++-v12/bits/stl_bvector.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/12/include/g++-v12/bits/vector.tcc
