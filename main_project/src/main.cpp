@@ -13,15 +13,6 @@ void print_matrix(const std::vector<double> matrix, int n) {
     }
 }
 
-// std::vector<double> matrix_subtraction(std::vector<double>& matrix1, std::vector<double>& matrix2, int size) {
-//     for (int i = 0; i < size; ++i) {
-//         for (int j = 0; j < size; ++j) {
-//             matrix1[i * size + j] -= matrix2[i * size + j];
-//         }
-//     }
-//     return matrix1;
-// }
-
 std::vector<double> generate_sym_matrix(int n) {
     std::vector<double> matrix(n * n);
     for (int i = 0; i < n; ++i) {
@@ -47,15 +38,10 @@ bool is_matrix_tridiagonal(std::vector<double> matrix, int size) {
 int main() {
     //TESTING
     std::srand(std::time(nullptr));
-
-    int n = 4;
+    int n = 256;
     std::vector<double> matrix = generate_sym_matrix(n);
     clock_t start = clock();
-    print_matrix(matrix, n);
-    std::cout << std::endl;
     matrix = householder_method(matrix, n);
-    std::cout << matrix.size() << std::endl;
-    print_matrix(matrix, n);
     clock_t end = clock();
     std::string message;
     if (is_matrix_tridiagonal(matrix, n)) {
