@@ -1,0 +1,5 @@
+n = 256 TIME = 0.75029s and matrix is tridiagonal :)
+n = 512 TIME = 5.98333s and matrix is tridiagonal :)
+n = 1024 TIME = 48.2268s and matrix is tridiagonal :)
+n = 2048 TIME = 391.107s and matrix is tridiagonal :)
+n = 4096 TIME = 3211.82s and matrix is tridiagonal :)
