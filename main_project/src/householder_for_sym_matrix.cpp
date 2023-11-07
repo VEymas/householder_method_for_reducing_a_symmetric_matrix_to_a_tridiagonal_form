@@ -1,100 +1,6 @@
 #include "householder_for_sym_matrix.h"
 
-std::vector<double> get_right_down_block(const std::vector<double>& matrix, int size, int step) {
-    std::vector<double> block((size - step - 1) * (size - step - 1));
-    int k{-1}, q{0};
-    for (int i = step + 1; i < size; ++i) {
-        ++k;
-        q = 0;
-        for (int j = step + 1; j < size; ++j) {
-            block[k * (size - step - 1) + q] = matrix[i * size + j];
-            ++q;
-        }
-    }
-    return block;
-}
-
-std::vector<double> get_left_down_block(const std::vector<double>& matrix, int size, int step) {
-    std::vector<double> block((size - 1 - step) * (1 + step));
-    int k{-1}, q{0};
-    for (int i = 1 + step; i < size; ++i) {
-        ++k;
-        q = 0;
-        for (int j = 0; j < step + 1; ++j) {
-            block[k * (step + 1) + q] = matrix[i * size + j];
-            ++q;
-        }
-    }
-    return block;
-}
-
-
-std::vector<double> get_left_top_block(const std::vector<double>& matrix, int size, int step) {
-    std::vector<double> block((step + 1) * (step + 1));
-    for (int i = 0; i < step + 1; ++i) {
-        for (int j = 0; j < step + 1; ++j) {
-            block[i * (step + 1) + j] = matrix[i * size + j];
-        }
-    }
-    return block;
-}
-
-std::vector<double> get_right_top_block(const std::vector<double>& matrix, int size, int step) {
-    std::vector<double> block((1 + step) * (size - 1 - step));
-    int k{-1}, q{0};
-    for (int i = 0; i < step + 1; ++i) {
-        ++k;
-        q = 0;
-        for (int j = 1 + step; j < size; ++j) {
-            block[k * (size - 1 - step) + q] = matrix[i * size + j];
-            ++q;
-        }
-    }
-    return block;
-}
-
-std::vector<double> get_matrix_from_blocks(const std::vector<double>& left_top_block, const std::vector<double>& right_top_block,
-                        const std::vector<double>& left_down_block, const std::vector<double>& right_down_block, int size, int step) {
-    std::vector<double> matrix(size * size);
-    for (int i = 0; i < step + 1; ++i) {
-        for (int j = 0; j < step + 1; ++j) {
-            matrix[i * size + j] = left_top_block[i * (step + 1) + j];
-        }
-    }
-
-    int k{-1}, q{0};
-    for (int i = 1 + step; i < size; ++i) {
-        ++k;
-        q = 0;
-        for (int j = 0; j < step + 1; ++j) {
-            matrix[i * size + j] = left_down_block[k * (step + 1) + q];
-            ++q;
-        }
-    }
-
-    k = -1;
-    q = 0;
-   for (int i = 0; i < step + 1; ++i) {
-        ++k;
-        q = 0;
-        for (int j = 1 + step; j < size; ++j) {
-            matrix[i * size + j] = right_top_block[k * (size - 1 - step) + q];
-            ++q;
-        }
-    }
-
-    k = -1;
-    q = 0;
-    for (int i = size - (size - step - 1); i < size; ++i) {
-        ++k;
-        q = 0;
-        for (int j = size - (size - step - 1); j < size; ++j) {
-             matrix[i * size + j] = right_down_block[k * (size - step - 1) + q];
-            ++q;
-        }
-    }
-    return matrix;
-}
+namespace householder{
 
 //res m*k A m*n B n*k
 std::vector<double> matrix_multiplication (const std::vector<double>& matrix1, const std::vector<double>& matrix2, int m, int n, int k) {
@@ -115,32 +21,6 @@ std::vector<double> mul_matrix_by_number(const std::vector<double>& matrix, doub
     for (int i = 0; i < size; ++i) {
         res_matrix[i] = matrix[i] * num;
     }
-    return res_matrix;
-}
-
-std::vector<double> matrix_subtract(const std::vector<double>& matrix1, const std::vector<double>& matrix2) {
-    int size = matrix1.size();
-    std::vector<double> res_matrix(size);
-    for (int i = 0; i < size; ++i) {
-        res_matrix[i] = matrix1[i] - matrix2[i];
-    }
-    return res_matrix;
-}
-
-std::vector<double> matrix_subtract_with_init_u(const std::vector<double>& matrix1, const std::vector<double>& matrix2, int size, int step, std::vector<double>& vector_u) {
-    int vector_size = (size - step - 1);
-    std::vector<double> res_matrix(matrix1.size());
-    int j = 0;
-    for (int i = 0; i < matrix1.size(); ++i) {
-        res_matrix[i] = matrix1[i] - matrix2[i];
-        if (i % vector_size == 0 && i != 0) {
-            vector_u[j++] = res_matrix[i];
-        }
-    }
-
-    vector_u.resize(vector_size - 1);
-    vector_u[0] += vector_norm(vector_u);
-    
     return res_matrix;
 }
 
@@ -177,42 +57,53 @@ std::vector<double> householder_method(const std::vector<double>& matrix_, int s
     for (int i = 0; i < size * size; ++i) {
         matrix[i] = matrix_[i];
     }
-    std::vector<double> vector_u(size - 1);
     for (int i = 0; i < size - 2; ++i) {
-        // init vector_u
-        if (i == 0) {
-            for (int j = 0; j < size - i - 1; ++j) {
-                vector_u[j] = matrix[(j + i + 1) * size + i];
-            }
-            vector_u[0] += vector_norm(vector_u);
+        std::vector<double> vector_s(size - i - 1);
+        for (int j = 0; j < size - i - 1; ++j) {
+            vector_s[j] = matrix[i * size + j + i + 1];
         }
-        
-        std::vector<double> left_top_block = get_left_top_block(matrix, size, i);
-        
-        std::vector<double> left_down_block = get_left_down_block(matrix, size, i);
-        std::vector<double> tmp_left_down = matrix_multiplication(vector_u, left_down_block, 1, size - 1 - i, 1 + i);
-        tmp_left_down = matrix_multiplication(vector_u, tmp_left_down, size - 1 - i, 1, 1  +i);
-        tmp_left_down = mul_matrix_by_number(tmp_left_down, 2/vector_norm2(vector_u));
-        left_down_block = matrix_subtract(left_down_block, tmp_left_down);
+        std::vector<double> vector_u = vector_s;
+        vector_u[0] += vector_norm(vector_s);
+        for (int j = i + 1; j < size; ++j) {
+            if (j == i + 1) {
+                matrix[i * size + j] = - vector_norm(vector_s);
+                matrix[j * size + i] = - vector_norm(vector_s);
+            } else {
+                matrix[i * size + j] = 0;
+                matrix[j * size + i] = 0;
+            }
+        }
+        double gamma = 2 / vector_norm2(vector_u);
+        std::vector<double> p(size - i - 1, 0);
+        for (int q = i + 1; q < size; ++q) {
+            for (int j = i + 1; j < size; ++j) {
+                p[q - i - 1] += matrix[q * size + j] * vector_u[j - i - 1];
+            }
+        }
 
-        std::vector<double> right_top_block = get_right_top_block(matrix, size, i);
-        std::vector<double> tmp_right_top = matrix_multiplication(right_top_block, vector_u, 1 + i, size - 1 - i, 1);
-        tmp_right_top = matrix_multiplication(tmp_right_top, vector_u, 1 + i, 1, size - 1 - i);
-        tmp_right_top = mul_matrix_by_number(tmp_right_top, 2/vector_norm2(vector_u));
-        right_top_block = matrix_subtract(right_top_block, tmp_right_top); 
+        p = mul_matrix_by_number(p, gamma);
 
-        std::vector<double> right_down_block = get_right_down_block(matrix, size, i);
-        std::vector<double> tmp_right_down = matrix_multiplication(vector_u, right_down_block, 1, size - 1 - i, size - 1 - i);
-        tmp_right_down = matrix_multiplication(vector_u, tmp_right_down, size - 1 - i, 1, size - 1 - i);
-        tmp_right_down = mul_matrix_by_number(tmp_right_down, 2/vector_norm2(vector_u));
-        right_down_block = matrix_subtract(right_down_block, tmp_right_down);
-        tmp_right_down = matrix_multiplication(right_down_block, vector_u, size - 1 - i, size - 1 - i, 1);
-        tmp_right_down = matrix_multiplication(tmp_right_down, vector_u, size - 1 - i, 1, size - 1 - i);
-        tmp_right_down = mul_matrix_by_number(tmp_right_down, 2/vector_norm2(vector_u));
-        right_down_block = matrix_subtract_with_init_u(right_down_block, tmp_right_down, size, i, vector_u);
+        std::vector<double> up = matrix_multiplication(vector_u, p, size - i - 1, 1, size - i - 1);
+        std::vector<double> pu = matrix_multiplication(p, vector_u, size - i - 1, 1, size - i - 1);
+        std::vector<double> uu = matrix_multiplication(vector_u, vector_u, size - i - 1, 1, size - i - 1);
+        double coeff{};
+        for (int j = 0; j < vector_u.size(); ++j) {
+            coeff += vector_u[j] * p[j];
+        }
+        coeff *= gamma;
+        uu = mul_matrix_by_number(uu, coeff);
 
-        matrix = get_matrix_from_blocks(left_top_block, right_top_block, left_down_block, right_down_block, size, i);
+        for (int j = 0; j < up.size(); ++j) {
+            up[j] += pu[j] - uu[j];
+        }
+
+        for (int q = i + 1; q < size; ++q) {
+            for (int j = i + 1; j < size; ++j) {
+                matrix[q * size + j] -= up[(q - i - 1) * (size - i - 1) + (j - i - 1)];
+            }
+        }
     }
     find_the_zeros_of_the_matrix(matrix, size);
     return matrix;
+}
 }

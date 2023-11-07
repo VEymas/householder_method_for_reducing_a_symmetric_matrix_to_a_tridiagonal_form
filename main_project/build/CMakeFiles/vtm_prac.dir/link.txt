@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/vtm_prac.dir/src/main.cpp.o CMakeFiles/vtm_prac.dir/src/householder_for_sym_matrix.cpp.o -o vtm_prac 
