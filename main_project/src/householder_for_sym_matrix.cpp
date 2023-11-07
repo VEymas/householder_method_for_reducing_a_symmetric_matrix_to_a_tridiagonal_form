@@ -118,10 +118,7 @@ std::vector<double> mul_matrix_by_number(const std::vector<double>& matrix, doub
     return res_matrix;
 }
 
-std::vector<double> matrix_subtraction(const std::vector<double>& matrix1, const std::vector<double>& matrix2) {
-    if (matrix1.size() != matrix2.size()) {
-        std::cerr << "Bad matrix in matrix_subtraction (sizes don't match)" << std::endl;
-    }
+std::vector<double> matrix_subtract(const std::vector<double>& matrix1, const std::vector<double>& matrix2) {
     int size = matrix1.size();
     std::vector<double> res_matrix(size);
     for (int i = 0; i < size; ++i) {
@@ -130,10 +127,7 @@ std::vector<double> matrix_subtraction(const std::vector<double>& matrix1, const
     return res_matrix;
 }
 
-std::vector<double> matrix_subtraction_with_init_u(const std::vector<double>& matrix1, const std::vector<double>& matrix2, int size, int step, std::vector<double>& vector_u) {
-    if (matrix1.size() != matrix2.size()) {
-        std::cerr << "Bad matrix in matrix_subtraction (sizes don't match)" << std::endl;
-    }
+std::vector<double> matrix_subtract_with_init_u(const std::vector<double>& matrix1, const std::vector<double>& matrix2, int size, int step, std::vector<double>& vector_u) {
     int vector_size = (size - step - 1);
     std::vector<double> res_matrix(matrix1.size());
     int j = 0;
@@ -199,23 +193,23 @@ std::vector<double> householder_method(const std::vector<double>& matrix_, int s
         std::vector<double> tmp_left_down = matrix_multiplication(vector_u, left_down_block, 1, size - 1 - i, 1 + i);
         tmp_left_down = matrix_multiplication(vector_u, tmp_left_down, size - 1 - i, 1, 1  +i);
         tmp_left_down = mul_matrix_by_number(tmp_left_down, 2/vector_norm2(vector_u));
-        left_down_block = matrix_subtraction(left_down_block, tmp_left_down);
+        left_down_block = matrix_subtract(left_down_block, tmp_left_down);
 
         std::vector<double> right_top_block = get_right_top_block(matrix, size, i);
         std::vector<double> tmp_right_top = matrix_multiplication(right_top_block, vector_u, 1 + i, size - 1 - i, 1);
         tmp_right_top = matrix_multiplication(tmp_right_top, vector_u, 1 + i, 1, size - 1 - i);
         tmp_right_top = mul_matrix_by_number(tmp_right_top, 2/vector_norm2(vector_u));
-        right_top_block = matrix_subtraction(right_top_block, tmp_right_top); 
+        right_top_block = matrix_subtract(right_top_block, tmp_right_top); 
 
         std::vector<double> right_down_block = get_right_down_block(matrix, size, i);
         std::vector<double> tmp_right_down = matrix_multiplication(vector_u, right_down_block, 1, size - 1 - i, size - 1 - i);
         tmp_right_down = matrix_multiplication(vector_u, tmp_right_down, size - 1 - i, 1, size - 1 - i);
         tmp_right_down = mul_matrix_by_number(tmp_right_down, 2/vector_norm2(vector_u));
-        right_down_block = matrix_subtraction(right_down_block, tmp_right_down);
+        right_down_block = matrix_subtract(right_down_block, tmp_right_down);
         tmp_right_down = matrix_multiplication(right_down_block, vector_u, size - 1 - i, size - 1 - i, 1);
         tmp_right_down = matrix_multiplication(tmp_right_down, vector_u, size - 1 - i, 1, size - 1 - i);
         tmp_right_down = mul_matrix_by_number(tmp_right_down, 2/vector_norm2(vector_u));
-        right_down_block = matrix_subtraction_with_init_u(right_down_block, tmp_right_down, size, i, vector_u);
+        right_down_block = matrix_subtract_with_init_u(right_down_block, tmp_right_down, size, i, vector_u);
 
         matrix = get_matrix_from_blocks(left_top_block, right_top_block, left_down_block, right_down_block, size, i);
     }

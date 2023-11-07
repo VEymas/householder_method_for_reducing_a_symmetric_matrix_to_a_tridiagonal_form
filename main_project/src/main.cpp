@@ -38,20 +38,21 @@ bool is_matrix_tridiagonal(std::vector<double> matrix, int size) {
 int main() {
     //TESTING
     std::srand(std::time(nullptr));
-    int n = 4;
-    //std::vector<double> matrix = generate_sym_matrix(n);
-    std::vector<double> matrix{10, 2, 4, 4, 2, 20, 1, 2, 4, 1, 20, 2, 4, 2, 2, 10};
-    clock_t start = clock();
-    matrix = householder_method(matrix, n);
-    clock_t end = clock();
-    std::string message;
-    print_matrix(matrix, n);
-    if (is_matrix_tridiagonal(matrix, n)) {
-        message = "and matrix is tridiagonal :)";
-    } else {
-        message = "but matrix is not tridiagonal :(";
+    int n = 256;
+    std::cout << "after:" << std::endl;
+    for (int i = 0; i < 5; ++i) {
+        std::vector<double> matrix = generate_sym_matrix(n);
+        clock_t start = clock();
+        matrix = householder_method(matrix, n);
+        clock_t end = clock();
+        std::string message;
+        if (is_matrix_tridiagonal(matrix, n)) {
+            message = "and matrix is tridiagonal :)";
+        } else {
+            message = "but matrix is not tridiagonal :(";
+        }
+        double seconds = (double)(end - start) / CLOCKS_PER_SEC;
+        std::cout << "n = " << n << " TIME = " << seconds << "s "<< message << std::endl;
+        n *= 2;
     }
-    double seconds = (double)(end - start) / CLOCKS_PER_SEC;
-    std::cout << "n = " << n << " TIME = " << seconds << "s "<< message << std::endl;
-
 }
