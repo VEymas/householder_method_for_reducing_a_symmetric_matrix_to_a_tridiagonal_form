@@ -38,12 +38,14 @@ bool is_matrix_tridiagonal(std::vector<double> matrix, int size) {
 int main() {
     //TESTING
     std::srand(std::time(nullptr));
-    int n = 256;
-    std::vector<double> matrix = generate_sym_matrix(n);
+    int n = 4;
+    //std::vector<double> matrix = generate_sym_matrix(n);
+    std::vector<double> matrix{10, 2, 4, 4, 2, 20, 1, 2, 4, 1, 20, 2, 4, 2, 2, 10};
     clock_t start = clock();
     matrix = householder_method(matrix, n);
     clock_t end = clock();
     std::string message;
+    print_matrix(matrix, n);
     if (is_matrix_tridiagonal(matrix, n)) {
         message = "and matrix is tridiagonal :)";
     } else {

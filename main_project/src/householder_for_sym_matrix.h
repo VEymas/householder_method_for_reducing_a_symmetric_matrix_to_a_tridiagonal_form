@@ -26,6 +26,8 @@ std::vector<double> mul_matrix_by_number(const std::vector<double>&, double);
 
 std::vector<double> matrix_subtraction(const std::vector<double>&, const std::vector<double>&);
 
+std::vector<double> matrix_subtraction_with_init_u(const std::vector<double>&, const std::vector<double>&, int, int, std::vector<double>&);
+
 double vector_norm(const std::vector<double>&);
 
 double vector_norm2(const std::vector<double>&);

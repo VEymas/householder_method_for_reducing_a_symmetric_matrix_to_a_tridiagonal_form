@@ -1,3 +1,0 @@
-/home/m.protopopov/vtm_prac/3.10.23/build/CMakeFiles/vtm_prac.dir
-/home/m.protopopov/vtm_prac/3.10.23/build/CMakeFiles/edit_cache.dir
-/home/m.protopopov/vtm_prac/3.10.23/build/CMakeFiles/rebuild_cache.dir
