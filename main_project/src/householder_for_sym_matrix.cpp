@@ -57,13 +57,16 @@ std::vector<double> householder_method(const std::vector<double>& matrix_, int s
     for (int i = 0; i < size * size; ++i) {
         matrix[i] = matrix_[i];
     }
+    std::vector<double> vector_s(size - 1);
+    std::vector<double> vector_u;
     for (int i = 0; i < size - 2; ++i) {
-        std::vector<double> vector_s(size - i - 1);
-        for (int j = 0; j < size - i - 1; ++j) {
-            vector_s[j] = matrix[i * size + j + i + 1];
+        if (i == 0) {
+            for (int j = 0; j < size - i - 1; ++j) {
+                vector_s[j] = matrix[i * size + j + i + 1];
+            }
+            vector_u = vector_s;
+            vector_u[0] += vector_norm(vector_s);
         }
-        std::vector<double> vector_u = vector_s;
-        vector_u[0] += vector_norm(vector_s);
         for (int j = i + 1; j < size; ++j) {
             if (j == i + 1) {
                 matrix[i * size + j] = - vector_norm(vector_s);
@@ -97,11 +100,17 @@ std::vector<double> householder_method(const std::vector<double>& matrix_, int s
             up[j] += pu[j] - uu[j];
         }
 
+        vector_s.resize(vector_s.size() - 1);
         for (int q = i + 1; q < size; ++q) {
             for (int j = i + 1; j < size; ++j) {
                 matrix[q * size + j] -= up[(q - i - 1) * (size - i - 1) + (j - i - 1)];
+                if (j == i + 1 && q != i + 1) {
+                    vector_s[q - i - 2] = matrix[q * size + j];
+                }
             }
         }
+        vector_u = vector_s;
+        vector_u[0] += vector_norm(vector_s);
     }
     find_the_zeros_of_the_matrix(matrix, size);
     return matrix;
