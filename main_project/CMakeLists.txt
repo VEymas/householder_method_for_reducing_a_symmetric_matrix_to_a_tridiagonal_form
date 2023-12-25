@@ -4,10 +4,9 @@ project(vtm_prac)
 set(CMAKE_CXX_STANDARD 11)
 option(BUILD_BLAS "USE BLAS" OFF)
 
-set(CMAKE_CXX_COMPILER "g++")
 set(GCC_COVERAGE_COMPILE_FLAGS "-Ofast")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
-set(INCLUDE_PATH "src")
+set(INCLUDE_PATH "include")
 
 include_directories(${INCLUDE_PATH})
 

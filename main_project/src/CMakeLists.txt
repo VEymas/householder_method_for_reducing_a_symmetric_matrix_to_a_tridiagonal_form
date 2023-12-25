@@ -4,9 +4,9 @@ target_sources(${CMAKE_PROJECT_NAME}
 )
 
 if(BUILD_BLAS)
-  find_package(LAPACK REQUIRED)
+  find_package(BLAS REQUIRED)
   target_link_libraries(${CMAKE_PROJECT_NAME}
-    ${LAPACK_LIBRARIES}
+    ${BLAS_LIBRARIES}
   )
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE USE_BLAS)
 else()
