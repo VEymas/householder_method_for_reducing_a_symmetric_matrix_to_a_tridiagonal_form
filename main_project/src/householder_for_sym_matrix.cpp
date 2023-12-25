@@ -28,24 +28,24 @@ void calculate_left(double* matrix, double* reflection_vector, int matrix_size, 
     char T = 'T';
     int dif = matrix_size - vector_size;
     int i_one = 1, vector_size_1 = vector_size + 1;
-    double sum, d_one = 1;
+    double sum, alpha = 1;
     double* vector_sum = new double[vector_size + 1];
-    double rev_norm = -1 / norm, d_zero = 0;
+    double rev_norm = -1 / norm, zero = 0;
 
-    dgemv_(&T, &vector_size, &vector_size_1, &rev_norm, matrix + (dif - 1) * matrix_size + dif, &matrix_size, reflection_vector, &i_one, &d_zero, vector_sum, &i_one);
-    dger_(&vector_size, &vector_size_1, &d_one, reflection_vector, &i_one, vector_sum, &i_one, matrix + (dif - 1) * matrix_size + dif, &matrix_size);
+    dgemv_(&T, &vector_size, &vector_size_1, &rev_norm, matrix + (dif - 1) * matrix_size + dif, &matrix_size, reflection_vector, &i_one, &zero, vector_sum, &i_one);
+    dger_(&vector_size, &vector_size_1, &alpha, reflection_vector, &i_one, vector_sum, &i_one, matrix + (dif - 1) * matrix_size + dif, &matrix_size);
     delete[] vector_sum;
 }
 
 void calculate_right(double* matrix, double* reflection_vector, int matrix_size, int vector_size, double norm) {
     char N = 'N';
-    double rev_norm = 1 / norm, d_zero = 0, d_m_one = -1;
+    double rev_norm = 1 / norm, zero = 0, minus_one = -1;
     int dif = matrix_size - vector_size, i_one = 1;
     int vector_size_1 = vector_size + 1;
     double* vector_sum = new double[vector_size + 1];
 
-    dgemv_(&N, &vector_size_1, &vector_size, &rev_norm, matrix + dif * matrix_size + dif - 1, &matrix_size, reflection_vector, &i_one, &d_zero, vector_sum, &i_one);
-    dger_(&vector_size_1, &vector_size, &d_m_one, vector_sum, &i_one, reflection_vector, &i_one,  matrix + dif * matrix_size + dif - 1, &matrix_size);
+    dgemv_(&N, &vector_size_1, &vector_size, &rev_norm, matrix + dif * matrix_size + dif - 1, &matrix_size, reflection_vector, &i_one, &zero, vector_sum, &i_one);
+    dger_(&vector_size_1, &vector_size, &minus_one, vector_sum, &i_one, reflection_vector, &i_one,  matrix + dif * matrix_size + dif - 1, &matrix_size);
     delete[] vector_sum;
 }
 
@@ -59,9 +59,9 @@ void calculate_reflection_vector(int step, int size, double* reflection_vector, 
         norm += matrix[pas + j] * matrix[pas + j];
     }
     if (reflection_vector[0] > 0) {
-        reflection_vector[0] += sqrt(norm);
+        reflection_vector[0] += std::sqrt(norm);
     } else {
-        reflection_vector[0] -= sqrt(norm);
+        reflection_vector[0] -= std::sqrt(norm);
     }
     norm -= matrix[pas + step + 1] * matrix[pas + step + 1] - reflection_vector[0] * reflection_vector[0];
     norm /= 2;
@@ -83,9 +83,13 @@ void calculate_left(double* matrix, double* reflection_vector, int matrix_size, 
 }
 
 void calculate_right(double* matrix, double* reflection_vector, int matrix_size, int vector_size, double norm) {
-    int dif = matrix_size - vector_size;
+int dif = matrix_size - vector_size;
     
     double* vector_sum = new double[matrix_size - dif + 1];
+
+    for (int i = 0; i < matrix_size - dif + 1; ++i) {
+        vector_sum[i] = 0;
+    }
 
     for(int j = dif; j < matrix_size; j++) {
         for(int i = dif - 1; i < matrix_size; i++) {
@@ -120,8 +124,8 @@ void householder_method(double* matrix, int matrix_size, double* test_reflection
     }
 }
 
-void calculate_error_for_househ(int matrix_size, double* matrix, double* test_reflection_vectors, double* test_norm, double* test_matrix) {
-    double error = 0, norm_matrix = 0;
+void calculate_error_for_househ(int matrix_size, double* matrix, double* test_reflection_vectors, double* test_norm, const double* test_matrix) {
+    double error = 0, matrix_norm = 0;
     for(int i = matrix_size - 3; i >= 0; i--) {
         calculate_left(matrix, test_reflection_vectors + i * (matrix_size - 1), matrix_size, matrix_size - i - 1, test_norm[i]);
         calculate_right(matrix, test_reflection_vectors + i * (matrix_size - 1), matrix_size, matrix_size - i - 1, test_norm[i]);
@@ -129,12 +133,10 @@ void calculate_error_for_househ(int matrix_size, double* matrix, double* test_re
 
     for(int i = 0; i < matrix_size; i++) {
         for(int j = 0; j < matrix_size; j++) {
-            norm_matrix += test_matrix[i * matrix_size + j] * test_matrix[i * matrix_size + j];
+            matrix_norm += test_matrix[i * matrix_size + j] * test_matrix[i * matrix_size + j];
             error += (test_matrix[i * matrix_size + j] - matrix[i * matrix_size + j]) * (test_matrix[i * matrix_size + j] - matrix[i * matrix_size + j]);
         }
     }
-
-
-    std::cout << "Error - " << std::sqrt(error) / std::sqrt(norm_matrix) << std::endl;
+    std::cout << "abs error - " << std::sqrt(error) << " rel error - " << std::sqrt(error) / std::sqrt(matrix_norm) << std::endl;
 }
 } //namespace householder

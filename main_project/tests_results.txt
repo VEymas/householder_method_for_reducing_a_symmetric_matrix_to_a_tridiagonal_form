@@ -1,5 +1,13 @@
-n = 256 TIME = 0.75029s and matrix is tridiagonal :)
-n = 512 TIME = 5.98333s and matrix is tridiagonal :)
-n = 1024 TIME = 48.2268s and matrix is tridiagonal :)
-n = 2048 TIME = 391.107s and matrix is tridiagonal :)
-n = 4096 TIME = 3211.82s and matrix is tridiagonal :)
+-DBUILD_BLAS=ON:
+size = 256 TIME = 0.008688s and matrix is tridiagonal :)
+size = 512 TIME = 0.074224s and matrix is tridiagonal :)
+size = 1024 TIME = 0.705174s and matrix is tridiagonal :)
+size = 2048 TIME = 6.61659s and matrix is tridiagonal :)
+size = 4096 TIME = 57.1917s and matrix is tridiagonal :)
+
+-DBUILD_BLAS=OFF:
+size = 256 TIME = 0.008488s and matrix is tridiagonal :)
+size = 512 TIME = 0.064096s and matrix is tridiagonal :)
+size = 1024 TIME = 0.513877s and matrix is tridiagonal :)
+size = 2048 TIME = 5.08556s and matrix is tridiagonal :)
+size = 4096 TIME = 42.5369s and matrix is tridiagonal :)

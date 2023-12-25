@@ -21,6 +21,6 @@ void calculate_right(double* matrix, double* reflection_vector, int matrix_size,
 
 void householder_method(double* matrix, int matrix_size, double* test_reflection_vectors, double* test_norm);
 
-void calculate_error_for_househ(int matrix_size, double* matrix, double* test_reflection_vectors, double* test_norm, double* test_matrix);
+void calculate_error_for_househ(int matrix_size, double* matrix, double* test_reflection_vectors, double* test_norm, const double* test_matrix);
 
 }

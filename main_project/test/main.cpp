@@ -5,7 +5,7 @@
 #include <string>
 #include <cmath>
 
-void print_matrix(const std::vector<double> matrix, int size) {
+void print_matrix(double* matrix, int size) {
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
             std::cout << matrix[i * size + j] << "\t";
@@ -28,7 +28,7 @@ double* generate_sym_matrix(int n) {
 bool is_matrix_tridiagonal(double* matrix, int size) {
     for (int i = 2; i < size; ++i) {
         for (int j = 0; j < i - 1; ++j) {
-            if (abs(matrix[i * size + j]) > EPS || abs(matrix[j * size + i]) > EPS) {
+            if (std::abs(matrix[i * size + j]) > EPS || std::abs(matrix[j * size + i]) > EPS) {
                 return false;
             } 
         }
